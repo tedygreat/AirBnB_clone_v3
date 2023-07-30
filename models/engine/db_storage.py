@@ -90,7 +90,7 @@ class DBStorage:
         self.__session.close()
 
 
-   def get(self, cls, id):
+    def get(self, cls, id):
         '''method to retrieve one object'''
         if cls and id:
             tempo = cls, __name__ + "." + id
