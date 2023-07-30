@@ -89,18 +89,32 @@ class DBStorage:
         '''
         self.__session.close()
 
-
     def get(self, cls, id):
-        '''method to retrieve one object'''
-        if cls and id:
-            tempo = cls, __name__ + "." + id
-            count = self.all(cls)
-            for key in count:
-                if key == tempo:
-                    return count[key]
-        else:
-            return None
+        '''
+            Retrieve an obj w/class name and id
+        '''
+        result = None
+        try:
+            objs = self.__session.query(models.classes[cls]).all()
+            for obj in objs:
+                if obj.id == id:
+                    result = obj
+        except BaseException:
+            pass
+        return result
 
     def count(self, cls=None):
-        '''class (optional)'''
-        return (len(self.all(cls)))
+        '''
+            Count num objects in DBstorage
+        '''
+        cls_counter = 0
+
+        if cls is not None:
+            objs = self.__session.query(models.classes[cls]).all()
+            cls_counter = len(objs)
+        else:
+            for k, v in models.classes.items():
+                if k != "BaseModel":
+                    objs = self.__session.query(models.classes[k]).all()
+                    cls_counter += len(objs)
+        return cls_counter
