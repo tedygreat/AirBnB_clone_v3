@@ -100,8 +100,7 @@ class DBStorage:
         '''
         obj_dict = models.storage.all(cls)
         for k, v in obj_dict.items():
-            matchstring = cls + '.' + id
-            if k == matchstring:
+            if v.id == id:
                 return v
 
         return None
