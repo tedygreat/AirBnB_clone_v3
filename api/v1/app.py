@@ -1,34 +1,34 @@
 #!/usr/bin/python3
-""" app for regiisterinthe g blueprint and starting flask
-"""
-from flask import Flask, make_response, jsonify
-from flask_cors import CORS
-from models import storage
+'''
+    flask with general routes
+    routes:
+        /status:    display "status":"OK"
+        /stats:     dispaly total for all classes
+'''
 from api.v1.views import app_views
-from os import getenv
+from flask import jsonify
+from models import storage
 
 
-app = Flask(__name__)
-CORS(app, origins="0.0.0.0")
-app.register_blueprint(app_views)
-
-
-@app.teardown_appcontext
-def tear_down(self):
+@app_views.route("/status")
+def status():
     '''
-    close query after each session
+        return JSON of OK status
     '''
-    storage.close()
+    return jsonify({'status': 'OK'})
 
 
-@app.errorhandler(404)
-def not_found(error):
+@app_views.route("/stats")
+def storage_counts():
     '''
-    return JSON formatted 404 status code response
+        return counts of all classes in storage
     '''
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-
-if __name__ == "__main__":
-    app.run(host=getenv("HBNB_API_HOST", "0.0.0.0"),
-            port=int(getenv("HBNB_API_PORT", "5000")), threaded=True)
+    cls_counts = {
+        "amenities": storage.count("Amenity"),
+        "cities": storage.count("City"),
+        "places": storage.count("Place"),
+        "reviews": storage.count("Review"),
+        "states": storage.count("State"),
+        "users": storage.count("User")
+    }
+    return jsonify(cls_counts)
