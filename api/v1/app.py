@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-'''
+"""
     app for regiisterinthe g blueprint and starting flask
-'''
+"""
 from flask import Flask, make_response, jsonify
 from flask_cors import CORS
 from models import storage
