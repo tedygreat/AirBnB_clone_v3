@@ -115,5 +115,8 @@ class DBStorage:
             number of objects in class, if no class name given
             return total number of objects in database
         '''
-        obj_dict = models.storage.all(cls)
+        if cls:
+            obj_dict = self.all(cls)
+        else:
+            obj_dict = self.__objects
         return len(obj_dict)
