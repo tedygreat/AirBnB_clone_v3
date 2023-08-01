@@ -23,7 +23,7 @@ class FileStorage:
 
         if cls != "":
             for k, v in self.__objects.items():
-                if str(cls) == k.split(".")[0]:
+                if cls == v.__class__ or cls == v.__class__.__name__:
                     new_dict[k] = v
             return new_dict
         else:
@@ -90,8 +90,8 @@ class FileStorage:
         '''
         obj_dict = self.all(cls)
         for k, v in obj_dict.items():
-            matchstring = cls + '.' + id
-            if k == matchstring:
+            
+            if id == v.id:
                 return v
 
         return None
